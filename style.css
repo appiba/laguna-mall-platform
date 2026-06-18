@@ -6,6 +6,7 @@
     --red: #ff3b30;
     --green: #34c759;
     --white: #ffffff;
+    --dark: #1d1d1f;
 }
 
 html, body {
@@ -15,6 +16,47 @@ html, body {
     margin: 0;
     padding: 0;
     padding-bottom: 80px;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-card {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 400px;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-container h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.logo-container p {
+    margin: 0;
+    font-size: 13px;
+    color: #86868b;
+}
+
+.error-text {
+    color: var(--red);
+    text-align: center;
+    display: none;
+    margin-top: 15px;
+    font-weight: 600;
 }
 
 .glass-header {
@@ -31,16 +73,9 @@ html, body {
     z-index: 100;
 }
 
-.logo-container h1 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.logo-container p {
-    margin: 0;
-    font-size: 12px;
-    color: #86868b;
+.glass-header .logo-container {
+    text-align: left;
+    margin-bottom: 0;
 }
 
 .user-profile {
@@ -52,10 +87,25 @@ html, body {
     font-size: 14px;
 }
 
+.logout-btn {
+    background: transparent;
+    border: none;
+    color: var(--red);
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+}
+
 .container {
     padding: 20px;
     max-width: 600px;
     margin: 0 auto;
+}
+
+.section-title {
+    color: var(--text-main);
+    font-size: 18px;
+    margin-bottom: 15px;
 }
 
 .modules-grid {
@@ -66,7 +116,7 @@ html, body {
 
 .module-btn {
     width: 100%;
-    padding: 20px;
+    padding: 22px 20px;
     border-radius: 16px;
     border: none;
     color: var(--white);
@@ -93,6 +143,7 @@ html, body {
 .bg-orange { background-color: var(--orange); }
 .bg-red { background-color: var(--red); }
 .bg-green { background-color: var(--green); }
+.bg-dark { background-color: var(--dark); }
 
 .divider {
     border: 0;
@@ -103,7 +154,7 @@ html, body {
 
 .radio-form-card {
     background: var(--white);
-    padding: 20px;
+    padding: 25px;
     border-radius: 16px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
 }
@@ -115,18 +166,23 @@ html, body {
 .input-group label {
     display: block;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-size: 14px;
 }
 
 select, input {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     border-radius: 10px;
     border: 1px solid #d2d2d7;
     font-size: 16px;
     box-sizing: border-box;
     font-family: inherit;
+    outline: none;
+}
+
+select:focus, input:focus {
+    border-color: var(--blue);
 }
 
 .audio-tester {
@@ -142,16 +198,30 @@ select, input {
     padding: 0 20px;
     font-weight: 600;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .submit-btn {
     width: 100%;
     background: var(--blue);
     color: var(--white);
-    padding: 15px;
+    padding: 16px;
     border: none;
     border-radius: 12px;
     font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.verify-btn {
+    width: 100%;
+    background: var(--dark);
+    color: var(--white);
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
     font-weight: 600;
     margin-top: 10px;
     cursor: pointer;
