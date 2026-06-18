@@ -1,164 +1,648 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laguna Mall Platform</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Laguna Mall Platform</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="description" content="Plataforma administrativa multi-local para Laguna Mall." />
 </head>
+
 <body>
-    
-    <div id="loginScreen" class="login-container">
-        <div class="login-card">
-            <div class="logo-container">
-                <h1>Laguna Mall</h1>
-                <p>Acceso Corporativo</p>
+  <div id="app">
+
+    <!-- LOGIN -->
+    <section id="loginScreen" class="screen active">
+      <div class="login-shell">
+        <div class="login-card glass-card">
+          <div class="brand-block">
+            <div class="brand-icon">LM</div>
+            <div>
+              <h1>Laguna Mall Platform</h1>
+              <p>Administración corporativa de locales comerciales</p>
             </div>
-            <form id="loginForm">
-                <div class="input-group">
-                    <label>Usuario</label>
-                    <input type="text" id="username" placeholder="Ej: lagunamall2026" required>
-                </div>
-                <div class="input-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="password" placeholder="Tu clave" required>
-                </div>
-                <button type="submit" class="submit-btn">Iniciar Sesión</button>
-            </form>
-            <p id="loginError" class="error-text">Credenciales incorrectas</p>
+          </div>
+
+          <form id="loginForm" class="form-stack">
+            <div class="field">
+              <label>Usuario</label>
+              <input id="loginUser" type="text" placeholder="Ej: lagunamall2026" autocomplete="username" required />
+            </div>
+
+            <div class="field">
+              <label>Clave</label>
+              <input id="loginPass" type="password" placeholder="Ingresa tu clave" autocomplete="current-password" required />
+            </div>
+
+            <button class="primary-btn" type="submit">Ingresar a la plataforma</button>
+
+            <div id="loginMessage" class="message"></div>
+          </form>
+
+          <div class="login-help">
+            <strong>Acceso SuperAdmin:</strong>
+            <span>Usuario: lagunamall2026 · Clave: 241987</span>
+          </div>
         </div>
-    </div>
+      </div>
+    </section>
 
-    <div id="mainApp" style="display: none;">
-        <header class="glass-header">
-            <div class="logo-container">
-                <h1>Laguna Mall</h1>
-                <p id="roleDisplay">Panel de Administración</p>
+    <!-- ADMIN APP -->
+    <section id="adminScreen" class="screen">
+      <header class="topbar glass-bar">
+        <div class="topbar-left">
+          <div class="brand-icon small">LM</div>
+          <div>
+            <h2>Laguna Mall Platform</h2>
+            <p>Centro de administración general</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <span id="adminName" class="user-pill">SuperAdmin</span>
+          <button id="refreshAdminBtn" class="ghost-btn">Actualizar</button>
+          <button id="logoutAdminBtn" class="danger-soft-btn">Salir</button>
+        </div>
+      </header>
+
+      <main class="main-layout">
+
+        <aside class="sidebar glass-card">
+          <button class="nav-btn active" data-admin-tab="overview">Resumen General</button>
+          <button class="nav-btn" data-admin-tab="locales">Locales</button>
+          <button class="nav-btn" data-admin-tab="usuarios">Usuarios</button>
+          <button class="nav-btn" data-admin-tab="cobros">Facturación y Arriendos</button>
+          <button class="nav-btn" data-admin-tab="tickets">Incidentes y Soporte</button>
+          <button class="nav-btn" data-admin-tab="logistica">Logística y Accesos</button>
+          <button class="nav-btn" data-admin-tab="documentos">Reglamentos y Documentos</button>
+          <button class="nav-btn" data-admin-tab="notificaciones">Recordatorios</button>
+        </aside>
+
+        <section class="content-area">
+
+          <!-- ADMIN OVERVIEW -->
+          <div id="admin-overview" class="admin-tab active">
+            <div class="hero-card glass-card">
+              <div>
+                <p class="eyebrow">Panel corporativo</p>
+                <h1>Administración completa del centro comercial</h1>
+                <p>
+                  Controla locales, usuarios arrendatarios, cobros, tickets, logística,
+                  documentos y recordatorios desde un solo centro de emisión.
+                </p>
+              </div>
             </div>
-            <div id="userProfileBadge" class="user-profile">Cargando...</div>
-            <button id="logoutBtn" class="logout-btn">Salir</button>
-        </header>
 
-        <main class="container">
-            
-            <section id="superAdminPanel" style="display: none; margin-bottom: 40px;">
-                
-                <div class="admin-card">
-                    <h2 class="section-title">Crear Nuevo Local / Usuario</h2>
-                    <form id="createUserForm">
-                        <div class="input-group">
-                            <input type="text" id="newLocalName" placeholder="Nombre del Local (Ej: Nike Store)" required>
-                        </div>
-                        <div class="input-group">
-                            <input type="text" id="newUsername" placeholder="Usuario de acceso" required>
-                        </div>
-                        <div class="input-group">
-                            <input type="password" id="newPassword" placeholder="Contraseña temporal" required>
-                        </div>
-                        <button type="submit" class="verify-btn bg-dark">Crear Arrendatario</button>
-                    </form>
+            <div class="stats-grid">
+              <div class="stat-card blue">
+                <span>Locales activos</span>
+                <strong id="statLocales">0</strong>
+              </div>
+              <div class="stat-card green">
+                <span>Usuarios</span>
+                <strong id="statUsuarios">0</strong>
+              </div>
+              <div class="stat-card red">
+                <span>Cobros pendientes</span>
+                <strong id="statCobrosPendientes">0</strong>
+              </div>
+              <div class="stat-card purple">
+                <span>Tickets abiertos</span>
+                <strong id="statTicketsAbiertos">0</strong>
+              </div>
+            </div>
+
+            <div class="module-grid">
+              <div class="module-card module-blue">
+                <h3>Facturación y Arriendos</h3>
+                <p>Emite arriendos, servicios centralizados, multas y mantenimiento.</p>
+              </div>
+
+              <div class="module-card module-green">
+                <h3>Servicios Centralizados</h3>
+                <p>Control de luz, agua, internet y valores operativos.</p>
+              </div>
+
+              <div class="module-card module-red">
+                <h3>Incidentes y Soporte</h3>
+                <p>Tickets de locales con respuesta administrativa.</p>
+              </div>
+
+              <div class="module-card module-orange">
+                <h3>Logística y Accesos</h3>
+                <p>Permisos para carga, ingreso, eventos, proveedores y mantenimiento.</p>
+              </div>
+
+              <div class="module-card module-dark">
+                <h3>Reglamentos y Documentos</h3>
+                <p>Subida de reglamentos, comunicados y documentos por local.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN LOCALES -->
+          <div id="admin-locales" class="admin-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Locales comerciales</p>
+                <h2>Crear y administrar locales</h2>
+              </div>
+            </div>
+
+            <div class="two-columns">
+              <form id="createTenantForm" class="glass-card form-card">
+                <h3>Crear nuevo local</h3>
+
+                <div class="field">
+                  <label>Nombre del local</label>
+                  <input name="nombreLocal" type="text" required placeholder="Ej: Local Demo" />
                 </div>
 
-                <div class="admin-card">
-                    <h2 class="section-title">Emitir Alerta o Cobro</h2>
-                    <form id="createAlertForm">
-                        <div class="input-group">
-                            <select id="alertTarget" required>
-                                <option value="">Seleccionar Local...</option>
-                                <option value="Todos">Todos los Locales</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <select id="alertType" required>
-                                <option value="COBRO PENDIENTE">Cobro de Arriendo o Servicios</option>
-                                <option value="REUNION">Reunión de Inquilinos</option>
-                                <option value="INCIDENTE">Aviso de Mantenimiento</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <input type="text" id="alertMessage" placeholder="Detalle (Ej: Debe pagar luz antes del 15)" required>
-                        </div>
-                        <button type="submit" class="verify-btn bg-blue">Enviar Alerta</button>
-                    </form>
+                <div class="field">
+                  <label>Categoría</label>
+                  <input name="categoria" type="text" placeholder="Ej: Moda, comida, tecnología" />
                 </div>
 
-                <div class="admin-card">
-                    <h2 class="section-title">Solicitudes Recibidas</h2>
-                    <div id="requestsInbox" class="inbox-container">
-                    </div>
-                </div>
-            </section>
-
-            <section id="arrendatarioPanel">
-                
-                <div id="myAlertsSection" class="admin-card" style="display: none; border-left: 4px solid var(--red);">
-                    <h2 class="section-title" style="color: var(--red);">Mis Notificaciones y Deudas</h2>
-                    <div id="myAlertsInbox"></div>
+                <div class="field">
+                  <label>Propietario / representante</label>
+                  <input name="propietario" type="text" placeholder="Nombre del responsable" />
                 </div>
 
-                <h2 class="section-title">Gestión Operativa</h2>
-                <section class="modules-grid">
-                    <button class="module-btn bg-blue" onclick="sendRequest('Finanzas', 'Consulta de Arriendos y Pagos')">
-                        <span class="icon">📄</span> Facturación y Arriendos
-                    </button>
-                    <button class="module-btn bg-orange" onclick="sendRequest('Servicios', 'Revisión de Luz y Agua')">
-                        <span class="icon">⚡</span> Servicios Centralizados
-                    </button>
-                    <button class="module-btn bg-red" onclick="sendRequest('Soporte', 'Nuevo Ticket de Incidente')">
-                        <span class="icon">🔧</span> Incidentes y Soporte
-                    </button>
-                    <button class="module-btn bg-green" onclick="sendRequest('Logística', 'Solicitud de Acceso y Carga')">
-                        <span class="icon">📦</span> Logística y Accesos
-                    </button>
-                </section>
+                <div class="field">
+                  <label>Correo</label>
+                  <input name="correo" type="email" placeholder="correo@ejemplo.com" />
+                </div>
 
-                <hr class="divider">
+                <div class="field">
+                  <label>Teléfono</label>
+                  <input name="telefono" type="text" placeholder="0999999999" />
+                </div>
 
-                <section class="radio-form-card">
-                    <h2>Adquisición de Frecuencias</h2>
-                    <form id="radioForm">
-                        <div class="input-group">
-                            <label>Correo Electrónico para Validación</label>
-                            <input type="email" id="userEmail" placeholder="empresa@correo.com" required>
-                            <button type="button" id="verifyEmailBtn" class="verify-btn">Comprobar Correo</button>
-                        </div>
+                <div class="field">
+                  <label>Número de local</label>
+                  <input name="numeroLocal" type="text" placeholder="Ej: A-101" />
+                </div>
 
-                        <div id="frecuenciaSection" style="display: none;">
-                            <div class="input-group">
-                                <label>País</label>
-                                <select id="pais" required>
-                                    <option value="">Seleccione...</option>
-                                    <option value="ecuador">Ecuador</option>
-                                </select>
-                            </div>
-                            
-                            <div class="input-group">
-                                <label>Provincia</label>
-                                <select id="provincia" required>
-                                    <option value="">Seleccione...</option>
-                                    <option value="imbabura">Imbabura</option>
-                                    <option value="pichincha">Pichincha</option>
-                                </select>
-                            </div>
+                <button class="primary-btn" type="submit">Crear local</button>
+              </form>
 
-                            <div class="input-group">
-                                <label>URL de Prueba (Streaming)</label>
-                                <div class="audio-tester">
-                                    <input type="url" id="streamUrl" placeholder="https://..." required>
-                                    <button type="button" id="playBtn" class="play-btn">▶ Probar</button>
-                                </div>
-                                <audio id="audioPlayer" style="display: none;"></audio>
-                            </div>
+              <div class="glass-card table-card">
+                <h3>Locales registrados</h3>
+                <div id="localesList" class="list-stack"></div>
+              </div>
+            </div>
+          </div>
 
-                            <button type="submit" class="submit-btn">Adquirir Frecuencia</button>
-                        </div>
-                    </form>
-                </section>
-            </section>
-        </main>
-        <div class="chat-fab">💬</div>
-    </div>
+          <!-- ADMIN USUARIOS -->
+          <div id="admin-usuarios" class="admin-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Usuarios arrendatarios</p>
+                <h2>Crear accesos privados por local</h2>
+              </div>
+            </div>
 
-    <script src="script.js"></script>
+            <div class="two-columns">
+              <form id="createUserForm" class="glass-card form-card">
+                <h3>Crear usuario</h3>
+
+                <div class="field">
+                  <label>Local asignado</label>
+                  <select name="tenantId" id="userTenantSelect" required></select>
+                </div>
+
+                <div class="field">
+                  <label>Nombre completo</label>
+                  <input name="nombre" type="text" placeholder="Nombre del usuario" />
+                </div>
+
+                <div class="field">
+                  <label>Usuario de acceso</label>
+                  <input name="usuario" type="text" required placeholder="Ej: localdemo" />
+                </div>
+
+                <div class="field">
+                  <label>Clave</label>
+                  <input name="clave" type="text" required placeholder="Ej: 1234" />
+                </div>
+
+                <div class="field">
+                  <label>Correo</label>
+                  <input name="correo" type="email" placeholder="correo@ejemplo.com" />
+                </div>
+
+                <div class="field">
+                  <label>Teléfono</label>
+                  <input name="telefono" type="text" placeholder="0999999999" />
+                </div>
+
+                <button class="primary-btn" type="submit">Crear usuario</button>
+              </form>
+
+              <div class="glass-card table-card">
+                <h3>Usuarios registrados</h3>
+                <div id="usuariosList" class="list-stack"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN COBROS -->
+          <div id="admin-cobros" class="admin-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Centro de emisión</p>
+                <h2>Facturación, arriendos y servicios</h2>
+              </div>
+            </div>
+
+            <div class="two-columns">
+              <form id="createChargeForm" class="glass-card form-card">
+                <h3>Emitir cobro</h3>
+
+                <div class="field">
+                  <label>Local</label>
+                  <select name="tenantId" id="chargeTenantSelect" required></select>
+                </div>
+
+                <div class="field">
+                  <label>Tipo</label>
+                  <select name="tipo" required>
+                    <option value="ARRIENDO">Arriendo</option>
+                    <option value="LUZ">Luz</option>
+                    <option value="AGUA">Agua</option>
+                    <option value="INTERNET">Internet</option>
+                    <option value="MANTENIMIENTO">Mantenimiento</option>
+                    <option value="MULTA">Multa</option>
+                    <option value="OTRO">Otro</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Concepto</label>
+                  <input name="concepto" type="text" required placeholder="Ej: Arriendo junio 2026" />
+                </div>
+
+                <div class="field">
+                  <label>Monto</label>
+                  <input name="monto" type="number" step="0.01" required placeholder="0.00" />
+                </div>
+
+                <div class="field">
+                  <label>Fecha de vencimiento</label>
+                  <input name="fechaVencimiento" type="date" />
+                </div>
+
+                <div class="field">
+                  <label>Observación</label>
+                  <textarea name="observacion" placeholder="Detalle opcional"></textarea>
+                </div>
+
+                <button class="primary-btn" type="submit">Emitir cobro</button>
+              </form>
+
+              <div class="glass-card table-card">
+                <h3>Cobros emitidos</h3>
+                <div id="cobrosList" class="list-stack"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN TICKETS -->
+          <div id="admin-tickets" class="admin-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Soporte</p>
+                <h2>Tickets e incidentes</h2>
+              </div>
+            </div>
+
+            <div class="glass-card table-card">
+              <h3>Tickets recibidos</h3>
+              <div id="adminTicketsList" class="list-stack"></div>
+            </div>
+          </div>
+
+          <!-- ADMIN LOGISTICA -->
+          <div id="admin-logistica" class="admin-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Accesos y permisos</p>
+                <h2>Solicitudes logísticas</h2>
+              </div>
+            </div>
+
+            <div class="glass-card table-card">
+              <h3>Solicitudes pendientes y procesadas</h3>
+              <div id="adminLogisticaList" class="list-stack"></div>
+            </div>
+          </div>
+
+          <!-- ADMIN DOCUMENTOS -->
+          <div id="admin-documentos" class="admin-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Reglamentos</p>
+                <h2>Documentos administrativos</h2>
+              </div>
+            </div>
+
+            <div class="two-columns">
+              <form id="uploadDocumentForm" class="glass-card form-card">
+                <h3>Registrar documento</h3>
+
+                <div class="field">
+                  <label>Título</label>
+                  <input name="titulo" type="text" required placeholder="Ej: Reglamento interno" />
+                </div>
+
+                <div class="field">
+                  <label>Descripción</label>
+                  <textarea name="descripcion" placeholder="Detalle del documento"></textarea>
+                </div>
+
+                <div class="field">
+                  <label>URL del documento</label>
+                  <input name="url" type="url" required placeholder="https://..." />
+                </div>
+
+                <div class="field">
+                  <label>Visibilidad</label>
+                  <select name="visibilidad">
+                    <option value="ALL">Todos los locales</option>
+                    <option value="TENANT">Solo arrendatarios</option>
+                    <option value="ADMIN">Solo administración</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Local específico opcional</label>
+                  <select name="tenantId" id="documentTenantSelect"></select>
+                </div>
+
+                <button class="primary-btn" type="submit">Guardar documento</button>
+              </form>
+
+              <div class="glass-card table-card">
+                <h3>Documentos registrados</h3>
+                <div id="documentosList" class="list-stack"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADMIN NOTIFICACIONES -->
+          <div id="admin-notificaciones" class="admin-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Recordatorios</p>
+                <h2>Enviar aviso a un local</h2>
+              </div>
+            </div>
+
+            <div class="two-columns">
+              <form id="createNotificationForm" class="glass-card form-card">
+                <h3>Nuevo recordatorio</h3>
+
+                <div class="field">
+                  <label>Local</label>
+                  <select name="tenantId" id="notificationTenantSelect" required></select>
+                </div>
+
+                <div class="field">
+                  <label>Tipo</label>
+                  <select name="tipo">
+                    <option value="AVISO">Aviso</option>
+                    <option value="COBRO">Cobro</option>
+                    <option value="LOGISTICA">Logística</option>
+                    <option value="DOCUMENTO">Documento</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Título</label>
+                  <input name="titulo" type="text" required placeholder="Ej: Recordatorio de pago" />
+                </div>
+
+                <div class="field">
+                  <label>Mensaje</label>
+                  <textarea name="mensaje" required placeholder="Escribe el mensaje"></textarea>
+                </div>
+
+                <button class="primary-btn" type="submit">Enviar recordatorio</button>
+              </form>
+
+              <div class="glass-card table-card">
+                <h3>Notificaciones enviadas</h3>
+                <div id="notificacionesList" class="list-stack"></div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </main>
+    </section>
+
+    <!-- TENANT APP -->
+    <section id="tenantScreen" class="screen">
+      <header class="topbar glass-bar">
+        <div class="topbar-left">
+          <div class="brand-icon small">LM</div>
+          <div>
+            <h2 id="tenantLocalName">Panel del local</h2>
+            <p>Gestión privada para arrendatarios</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <span id="tenantUserName" class="user-pill">Arrendatario</span>
+          <button id="refreshTenantBtn" class="ghost-btn">Actualizar</button>
+          <button id="logoutTenantBtn" class="danger-soft-btn">Salir</button>
+        </div>
+      </header>
+
+      <main class="main-layout">
+
+        <aside class="sidebar glass-card">
+          <button class="nav-btn active" data-tenant-tab="tenant-overview">Mi resumen</button>
+          <button class="nav-btn" data-tenant-tab="tenant-deudas">Mis deudas</button>
+          <button class="nav-btn" data-tenant-tab="tenant-tickets">Soporte</button>
+          <button class="nav-btn" data-tenant-tab="tenant-logistica">Logística</button>
+          <button class="nav-btn" data-tenant-tab="tenant-documentos">Documentos</button>
+          <button class="nav-btn" data-tenant-tab="tenant-notificaciones">Avisos</button>
+        </aside>
+
+        <section class="content-area">
+
+          <div id="tenant-tenant-overview" class="tenant-tab active">
+            <div class="hero-card glass-card">
+              <div>
+                <p class="eyebrow">Panel privado</p>
+                <h1>Bienvenido a tu centro de administración</h1>
+                <p>Desde aquí puedes revisar deudas, documentos, tickets y solicitudes logísticas de tu local.</p>
+              </div>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-card red">
+                <span>Deudas pendientes</span>
+                <strong id="tenantStatPendientes">0</strong>
+              </div>
+              <div class="stat-card purple">
+                <span>Tickets</span>
+                <strong id="tenantStatTickets">0</strong>
+              </div>
+              <div class="stat-card orange">
+                <span>Logística</span>
+                <strong id="tenantStatLogistica">0</strong>
+              </div>
+              <div class="stat-card green">
+                <span>Avisos</span>
+                <strong id="tenantStatAvisos">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div id="tenant-tenant-deudas" class="tenant-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Facturación</p>
+                <h2>Mis deudas y cobros</h2>
+              </div>
+            </div>
+
+            <div class="glass-card table-card">
+              <div id="tenantCobrosList" class="list-stack"></div>
+            </div>
+          </div>
+
+          <div id="tenant-tenant-tickets" class="tenant-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Soporte</p>
+                <h2>Crear ticket o revisar respuestas</h2>
+              </div>
+            </div>
+
+            <div class="two-columns">
+              <form id="tenantCreateTicketForm" class="glass-card form-card">
+                <h3>Nuevo ticket</h3>
+
+                <div class="field">
+                  <label>Asunto</label>
+                  <input name="asunto" type="text" required placeholder="Ej: Problema eléctrico" />
+                </div>
+
+                <div class="field">
+                  <label>Prioridad</label>
+                  <select name="prioridad">
+                    <option value="BAJA">Baja</option>
+                    <option value="MEDIA">Media</option>
+                    <option value="ALTA">Alta</option>
+                    <option value="URGENTE">Urgente</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Descripción</label>
+                  <textarea name="descripcion" required placeholder="Describe el problema"></textarea>
+                </div>
+
+                <button class="primary-btn" type="submit">Enviar ticket</button>
+              </form>
+
+              <div class="glass-card table-card">
+                <h3>Mis tickets</h3>
+                <div id="tenantTicketsList" class="list-stack"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="tenant-tenant-logistica" class="tenant-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Permisos</p>
+                <h2>Solicitudes de logística y acceso</h2>
+              </div>
+            </div>
+
+            <div class="two-columns">
+              <form id="tenantCreateLogisticsForm" class="glass-card form-card">
+                <h3>Nueva solicitud</h3>
+
+                <div class="field">
+                  <label>Tipo de solicitud</label>
+                  <select name="tipoSolicitud">
+                    <option value="INGRESO_PROVEEDOR">Ingreso de proveedor</option>
+                    <option value="CARGA_DESCARGA">Carga y descarga</option>
+                    <option value="MANTENIMIENTO">Mantenimiento</option>
+                    <option value="EVENTO_LOCAL">Evento en local</option>
+                    <option value="OTRO">Otro</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Fecha solicitada</label>
+                  <input name="fechaSolicitada" type="date" />
+                </div>
+
+                <div class="field">
+                  <label>Descripción</label>
+                  <textarea name="descripcion" required placeholder="Detalle de la solicitud"></textarea>
+                </div>
+
+                <button class="primary-btn" type="submit">Enviar solicitud</button>
+              </form>
+
+              <div class="glass-card table-card">
+                <h3>Mis solicitudes</h3>
+                <div id="tenantLogisticaList" class="list-stack"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="tenant-tenant-documentos" class="tenant-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Solo lectura</p>
+                <h2>Reglamentos y documentos</h2>
+              </div>
+            </div>
+
+            <div class="glass-card table-card">
+              <div id="tenantDocumentosList" class="list-stack"></div>
+            </div>
+          </div>
+
+          <div id="tenant-tenant-notificaciones" class="tenant-tab">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Comunicados</p>
+                <h2>Avisos de administración</h2>
+              </div>
+            </div>
+
+            <div class="glass-card table-card">
+              <div id="tenantNotificacionesList" class="list-stack"></div>
+            </div>
+          </div>
+
+        </section>
+      </main>
+    </section>
+
+    <!-- GLOBAL SUPPORT BUTTON -->
+    <button id="supportButton" class="support-button">
+      Soporte
+    </button>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"></div>
+
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
