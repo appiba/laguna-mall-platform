@@ -7,71 +7,117 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="glass-header">
-        <div class="logo-container">
-            <h1>Laguna Mall</h1>
-            <p>Panel de Administración</p>
-        </div>
-        <div class="user-profile">Local A-12</div>
-    </header>
-
-    <main class="container">
-        <section class="modules-grid">
-            <button class="module-btn bg-blue" onclick="sendDataToSheet('Finanzas', 'Local A-12', 'Consulta de Arriendos')">
-                <span class="icon">📄</span>
-                Facturación y Arriendos
-            </button>
-            <button class="module-btn bg-orange" onclick="sendDataToSheet('Servicios', 'Local A-12', 'Revisión de Luz y Agua')">
-                <span class="icon">⚡</span>
-                Servicios Centralizados
-            </button>
-            <button class="module-btn bg-red" onclick="sendDataToSheet('Soporte', 'Local A-12', 'Nuevo Ticket de Mantenimiento')">
-                <span class="icon">🔧</span>
-                Incidentes y Soporte
-            </button>
-            <button class="module-btn bg-green" onclick="sendDataToSheet('Logística', 'Local A-12', 'Solicitud de Carga/Descarga')">
-                <span class="icon">📦</span>
-                Logística y Accesos
-            </button>
-        </section>
-
-        <hr class="divider">
-
-        <section class="radio-form-card">
-            <h2>Adquisición de Frecuencias</h2>
-            <form id="radioForm">
+    
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="logo-container">
+                <h1>Laguna Mall</h1>
+                <p>Acceso Corporativo</p>
+            </div>
+            <form id="loginForm">
                 <div class="input-group">
-                    <label>País</label>
-                    <select id="pais" required>
-                        <option value="">Seleccione...</option>
-                        <option value="ecuador">Ecuador</option>
-                    </select>
+                    <label>Usuario</label>
+                    <input type="text" id="username" placeholder="Ingrese su usuario" required>
                 </div>
-                
                 <div class="input-group">
-                    <label>Provincia</label>
-                    <select id="provincia" required>
-                        <option value="">Seleccione...</option>
-                        <option value="imbabura">Imbabura</option>
-                        <option value="pichincha">Pichincha</option>
-                    </select>
+                    <label>Contraseña</label>
+                    <input type="password" id="password" placeholder="Ingrese su clave" required>
                 </div>
-
-                <div class="input-group">
-                    <label>URL de Prueba (Streaming)</label>
-                    <div class="audio-tester">
-                        <input type="url" id="streamUrl" placeholder="https://..." required>
-                        <button type="button" id="playBtn" class="play-btn">▶ Probar</button>
-                    </div>
-                    <audio id="audioPlayer" style="display: none;"></audio>
-                </div>
-
-                <button type="submit" class="submit-btn">Verificar y Adquirir</button>
+                <button type="submit" class="submit-btn">Iniciar Sesión</button>
             </form>
-        </section>
-    </main>
+            <p id="loginError" class="error-text">Credenciales incorrectas</p>
+        </div>
+    </div>
 
-    <div class="chat-fab">💬</div>
+    <div id="mainApp" style="display: none;">
+        <header class="glass-header">
+            <div class="logo-container">
+                <h1>Laguna Mall</h1>
+                <p id="roleDisplay">Panel de Administración</p>
+            </div>
+            <div id="userProfileBadge" class="user-profile">Cargando...</div>
+            <button id="logoutBtn" class="logout-btn">Salir</button>
+        </header>
+
+        <main class="container">
+            
+            <section id="superAdminPanel" style="display: none; margin-bottom: 30px;">
+                <h2 class="section-title">Centro de Emisión (SuperAdmin)</h2>
+                <div class="modules-grid">
+                    <button class="module-btn bg-dark">
+                        <span class="icon">📢</span> Emitir Comunicado Global
+                    </button>
+                    <button class="module-btn bg-dark">
+                        <span class="icon">🧾</span> Cargar Facturas a Locales
+                    </button>
+                    <button class="module-btn bg-dark">
+                        <span class="icon">📁</span> Subir Reglamentos
+                    </button>
+                </div>
+            </section>
+
+            <h2 class="section-title">Gestión Operativa</h2>
+            <section class="modules-grid">
+                <button class="module-btn bg-blue" onclick="sendDataToSheet('Finanzas', 'Consulta de Arriendos')">
+                    <span class="icon">📄</span> Facturación y Arriendos
+                </button>
+                <button class="module-btn bg-orange" onclick="sendDataToSheet('Servicios', 'Revisión de Luz y Agua')">
+                    <span class="icon">⚡</span> Servicios Centralizados
+                </button>
+                <button class="module-btn bg-red" onclick="sendDataToSheet('Soporte', 'Nuevo Ticket')">
+                    <span class="icon">🔧</span> Incidentes y Soporte
+                </button>
+                <button class="module-btn bg-green" onclick="sendDataToSheet('Logística', 'Solicitud de Acceso')">
+                    <span class="icon">📦</span> Logística y Accesos
+                </button>
+            </section>
+
+            <hr class="divider">
+
+            <section class="radio-form-card">
+                <h2>Adquisición de Frecuencias</h2>
+                <form id="radioForm">
+                    <div class="input-group">
+                        <label>Correo Electrónico para Validación</label>
+                        <input type="email" id="userEmail" placeholder="empresa@correo.com" required>
+                        <button type="button" id="verifyEmailBtn" class="verify-btn">Comprobar Correo</button>
+                    </div>
+
+                    <div id="frecuenciaSection" style="display: none;">
+                        <div class="input-group">
+                            <label>País</label>
+                            <select id="pais" required>
+                                <option value="">Seleccione...</option>
+                                <option value="ecuador">Ecuador</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Provincia</label>
+                            <select id="provincia" required>
+                                <option value="">Seleccione...</option>
+                                <option value="imbabura">Imbabura</option>
+                                <option value="pichincha">Pichincha</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>URL de Prueba (Streaming)</label>
+                            <div class="audio-tester">
+                                <input type="url" id="streamUrl" placeholder="https://..." required>
+                                <button type="button" id="playBtn" class="play-btn">▶ Probar</button>
+                            </div>
+                            <audio id="audioPlayer" style="display: none;"></audio>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Adquirir Frecuencia</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <div class="chat-fab">💬</div>
+    </div>
 
     <script src="script.js"></script>
 </body>
