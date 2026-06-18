@@ -8,6 +8,7 @@
 </head>
 <body>
     
+    <!-- PANTALLA DE LOGIN -->
     <div id="loginScreen" class="login-container">
         <div class="login-card">
             <div class="logo-container">
@@ -17,11 +18,11 @@
             <form id="loginForm">
                 <div class="input-group">
                     <label>Usuario</label>
-                    <input type="text" id="username" placeholder="Ingrese su usuario" required>
+                    <input type="text" id="username" placeholder="Ej: lagunamall2026" required>
                 </div>
                 <div class="input-group">
                     <label>Contraseña</label>
-                    <input type="password" id="password" placeholder="Ingrese su clave" required>
+                    <input type="password" id="password" placeholder="Tu clave" required>
                 </div>
                 <button type="submit" class="submit-btn">Iniciar Sesión</button>
             </form>
@@ -29,6 +30,7 @@
         </div>
     </div>
 
+    <!-- PANTALLA PRINCIPAL -->
     <div id="mainApp" style="display: none;">
         <header class="glass-header">
             <div class="logo-container">
@@ -41,81 +43,86 @@
 
         <main class="container">
             
-            <section id="superAdminPanel" style="display: none; margin-bottom: 30px;">
-                <h2 class="section-title">Centro de Emisión (SuperAdmin)</h2>
-                <div class="modules-grid">
-                    <button class="module-btn bg-dark">
-                        <span class="icon">📢</span> Emitir Comunicado Global
-                    </button>
-                    <button class="module-btn bg-dark">
-                        <span class="icon">🧾</span> Cargar Facturas a Locales
-                    </button>
-                    <button class="module-btn bg-dark">
-                        <span class="icon">📁</span> Subir Reglamentos
-                    </button>
+            <!-- PANEL EXCLUSIVO DEL SUPERADMIN -->
+            <section id="superAdminPanel" style="display: none; margin-bottom: 40px;">
+                
+                <!-- 1. Crear Nuevo Usuario -->
+                <div class="admin-card">
+                    <h2 class="section-title">👤 Crear Nuevo Local / Usuario</h2>
+                    <form id="createUserForm">
+                        <div class="input-group">
+                            <input type="text" id="newLocalName" placeholder="Nombre del Local (Ej: Nike Store)" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="newUsername" placeholder="Usuario de acceso" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="newPassword" placeholder="Contraseña temporal" required>
+                        </div>
+                        <button type="submit" class="verify-btn bg-dark">Crear Arrendatario</button>
+                    </form>
+                </div>
+
+                <!-- 2. Emitir Alertas y Cobros -->
+                <div class="admin-card">
+                    <h2 class="section-title">📢 Emitir Alerta o Cobro</h2>
+                    <form id="createAlertForm">
+                        <div class="input-group">
+                            <select id="alertTarget" required>
+                                <option value="">Seleccionar Local...</option>
+                                <option value="Todos">Todos los Locales</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <select id="alertType" required>
+                                <option value="💰 COBRO PENDIENTE">Cobro de Arriendo/Servicios</option>
+                                <option value="📅 REUNIÓN">Reunión de Inquilinos</option>
+                                <option value="⚠️ INCIDENTE">Aviso de Mantenimiento</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="alertMessage" placeholder="Detalle (Ej: Debe pagar luz antes del 15)" required>
+                        </div>
+                        <button type="submit" class="verify-btn bg-blue">Enviar Alerta</button>
+                    </form>
+                </div>
+
+                <!-- 3. Bandeja de Solicitudes de los Locales -->
+                <div class="admin-card">
+                    <h2 class="section-title">📥 Solicitudes Recibidas</h2>
+                    <div id="requestsInbox" class="inbox-container">
+                        <!-- Las solicitudes aparecerán aquí -->
+                    </div>
                 </div>
             </section>
 
-            <h2 class="section-title">Gestión Operativa</h2>
-            <section class="modules-grid">
-                <button class="module-btn bg-blue" onclick="sendDataToSheet('Finanzas', 'Consulta de Arriendos')">
-                    <span class="icon">📄</span> Facturación y Arriendos
-                </button>
-                <button class="module-btn bg-orange" onclick="sendDataToSheet('Servicios', 'Revisión de Luz y Agua')">
-                    <span class="icon">⚡</span> Servicios Centralizados
-                </button>
-                <button class="module-btn bg-red" onclick="sendDataToSheet('Soporte', 'Nuevo Ticket')">
-                    <span class="icon">🔧</span> Incidentes y Soporte
-                </button>
-                <button class="module-btn bg-green" onclick="sendDataToSheet('Logística', 'Solicitud de Acceso')">
-                    <span class="icon">📦</span> Logística y Accesos
-                </button>
+            <!-- PANEL DEL ARRENDATARIO (Y Opciones Operativas) -->
+            <section id="arrendatarioPanel">
+                
+                <!-- Notificaciones Recibidas del Admin -->
+                <div id="myAlertsSection" class="admin-card" style="display: none; border-left: 4px solid var(--red);">
+                    <h2 class="section-title" style="color: var(--red);">🔔 Mis Notificaciones y Deudas</h2>
+                    <div id="myAlertsInbox"></div>
+                </div>
+
+                <h2 class="section-title">Gestión Operativa</h2>
+                <section class="modules-grid">
+                    <button class="module-btn bg-blue" onclick="sendRequest('Finanzas', 'Consulta de Arriendos / Pagos')">
+                        <span class="icon">📄</span> Facturación y Arriendos
+                    </button>
+                    <button class="module-btn bg-orange" onclick="sendRequest('Servicios', 'Revisión de Luz y Agua')">
+                        <span class="icon">⚡</span> Servicios Centralizados
+                    </button>
+                    <button class="module-btn bg-red" onclick="sendRequest('Soporte', 'Nuevo Ticket de Incidente')">
+                        <span class="icon">🔧</span> Incidentes y Soporte
+                    </button>
+                    <button class="module-btn bg-green" onclick="sendRequest('Logística', 'Solicitud de Acceso/Carga')">
+                        <span class="icon">📦</span> Logística y Accesos
+                    </button>
+                </section>
             </section>
 
-            <hr class="divider">
-
-            <section class="radio-form-card">
-                <h2>Adquisición de Frecuencias</h2>
-                <form id="radioForm">
-                    <div class="input-group">
-                        <label>Correo Electrónico para Validación</label>
-                        <input type="email" id="userEmail" placeholder="empresa@correo.com" required>
-                        <button type="button" id="verifyEmailBtn" class="verify-btn">Comprobar Correo</button>
-                    </div>
-
-                    <div id="frecuenciaSection" style="display: none;">
-                        <div class="input-group">
-                            <label>País</label>
-                            <select id="pais" required>
-                                <option value="">Seleccione...</option>
-                                <option value="ecuador">Ecuador</option>
-                            </select>
-                        </div>
-                        
-                        <div class="input-group">
-                            <label>Provincia</label>
-                            <select id="provincia" required>
-                                <option value="">Seleccione...</option>
-                                <option value="imbabura">Imbabura</option>
-                                <option value="pichincha">Pichincha</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label>URL de Prueba (Streaming)</label>
-                            <div class="audio-tester">
-                                <input type="url" id="streamUrl" placeholder="https://..." required>
-                                <button type="button" id="playBtn" class="play-btn">▶ Probar</button>
-                            </div>
-                            <audio id="audioPlayer" style="display: none;"></audio>
-                        </div>
-
-                        <button type="submit" class="submit-btn">Adquirir Frecuencia</button>
-                    </div>
-                </form>
-            </section>
         </main>
-
         <div class="chat-fab">💬</div>
     </div>
 
