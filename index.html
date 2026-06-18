@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laguna Mall Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1>Laguna Mall</h1>
+            <p>Panel de Administración</p>
+        </div>
+        <div class="user-profile">Local A-12</div>
+    </header>
 
+    <main class="container">
+        <section class="modules-grid">
+            <button class="module-btn bg-blue" onclick="sendDataToSheet('Finanzas', 'Local A-12', 'Consulta de Arriendos')">
+                <span class="icon">📄</span>
+                Facturación y Arriendos
+            </button>
+            <button class="module-btn bg-orange" onclick="sendDataToSheet('Servicios', 'Local A-12', 'Revisión de Luz y Agua')">
+                <span class="icon">⚡</span>
+                Servicios Centralizados
+            </button>
+            <button class="module-btn bg-red" onclick="sendDataToSheet('Soporte', 'Local A-12', 'Nuevo Ticket de Mantenimiento')">
+                <span class="icon">🔧</span>
+                Incidentes y Soporte
+            </button>
+            <button class="module-btn bg-green" onclick="sendDataToSheet('Logística', 'Local A-12', 'Solicitud de Carga/Descarga')">
+                <span class="icon">📦</span>
+                Logística y Accesos
+            </button>
+        </section>
+
+        <hr class="divider">
+
+        <section class="radio-form-card">
+            <h2>Adquisición de Frecuencias</h2>
+            <form id="radioForm">
+                <div class="input-group">
+                    <label>País</label>
+                    <select id="pais" required>
+                        <option value="">Seleccione...</option>
+                        <option value="ecuador">Ecuador</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Provincia</label>
+                    <select id="provincia" required>
+                        <option value="">Seleccione...</option>
+                        <option value="imbabura">Imbabura</option>
+                        <option value="pichincha">Pichincha</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>URL de Prueba (Streaming)</label>
+                    <div class="audio-tester">
+                        <input type="url" id="streamUrl" placeholder="https://..." required>
+                        <button type="button" id="playBtn" class="play-btn">▶ Probar</button>
+                    </div>
+                    <audio id="audioPlayer" style="display: none;"></audio>
+                </div>
+
+                <button type="submit" class="submit-btn">Verificar y Adquirir</button>
+            </form>
+        </section>
+    </main>
+
+    <div class="chat-fab">💬</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
